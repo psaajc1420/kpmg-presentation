@@ -53,8 +53,9 @@ def test(X_test, y_test, classifier):
     y_pred = (y_pred > 0,5)
     metrics(y_test, y_pred)
 
-# Predicting the test set using fitted model
 def metrics(y_test, y_pred):
+    # Predicting the test set using fitted model
+    
     # Creating the Confusion Matrix
     from sklearn.metrics import confusion_matrix
     cm = confusion_matrix(y_test, y_pred)
@@ -75,10 +76,10 @@ if __name__ == "__main__":
     # Grab the transformed features and labels split up into test and training sets
     X_train, X_test, y_train, y_test = transforming_data(dataset)
 
-    # # Train the Neural Net 
+    # Train the Neural Net 
     classifier = train(X_train, y_train)
 
-    # # Test the accuracy of the model by predicting on the test set 
+    # Test the accuracy of the model by predicting on the test set 
     test(X_test, y_test, classifier)
 
     
