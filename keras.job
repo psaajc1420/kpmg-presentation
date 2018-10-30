@@ -1,0 +1,11 @@
+#!bin/bash
+#SBATCH -J keras_impl                  # job name to display in queue
+#SBATCH -o keras_out.txt               # standard ouput file
+#SBATCH -e keras_err.txt               # standard error file
+#SBATCH -p development                 # requested partition
+#SBATCH -t 120                         # maximum runtime in minutes
+#SBATCH --mail-user jcadena@smu.edu    # email address to receive notifications
+#SBATCH --mail-type=all                # which email notifications to receive
+
+module load python/3
+python credit_fraud_keras.py
