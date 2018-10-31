@@ -34,9 +34,7 @@ def train(X_train, y_train):
     classifier.add(Dense(units = 100, activation = "relu", kernel_initializer = "uniform", input_dim = 30))
 
     # Creating all the hidden layers
-    classifier.add(Dense(units = 50, activation = "relu", kernel_initializer = "uniform"))
-    classifier.add(Dense(units = 20, activation = "relu", kernel_initializer = "uniform"))
-    classifier.add(Dense(units = 5, activation = "relu", kernel_initializer = "uniform"))
+    classifier.add(Dense(units = 100, activation = "relu", kernel_initializer = "uniform"))
     classifier.add(Dense(units = 1, activation = "sigmoid", kernel_initializer = "uniform"))
 
     # Specify the optimization and loss functions for the 
