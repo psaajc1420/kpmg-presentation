@@ -40,10 +40,10 @@ def train(X_train, y_train):
     classifier.add(Dense(units = 1, activation = "sigmoid", kernel_initializer = "uniform"))
 
     # Specify the optimization and loss functions for the 
-    classifier.compile(optimizer = "adam", loss = "binary_crossentropy", metrics = ["accuracy"])
+    classifier.compile(optimizer = "rmsprop", loss = "binary_crossentropy", metrics = ["accuracy"])
 
     # Fitting the Neural Network to the training set
-    classifier.fit(X_train, y_train, batch_size = 10, epochs = 100)
+    classifier.fit(X_train, y_train, batch_size = 200, epochs = 30)
 
     return classifier
 
