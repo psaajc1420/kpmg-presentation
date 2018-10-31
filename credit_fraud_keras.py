@@ -47,22 +47,21 @@ def train(X_train, y_train):
 
 def test(X_test, y_test, classifier):
     
+    # Predicting the test set using fitted model
     y_pred = classifier.predict(X_test)
     y_pred = (y_pred > 0.5)
     
     print(metrics(y_test, y_pred))
 
-def metrics(y_test, y_pred):
-    # Predicting the test set using fitted model
-    
+def metrics(y_test, y_pred):    
     # Creating the Confusion Matrix
     from sklearn.metrics import confusion_matrix
     cm = confusion_matrix(y_test, y_pred)
-    tn, tp, fn, fp = cm.ravel()
+    tn, fp, fn, tp = cm.ravel()
     accuracy = (tp + tn)/(tn + tp + fn + fp)
     precision = tp/(tp + fp)
     recall = tp/(tp + fn)
-    f1_score = 2*accuracy*recall/(recall + precision)
+    f1_score = 2*precision*recall/(recall + precision)
 
     return cm, accuracy, precision, recall, f1_score
 
@@ -80,15 +79,4 @@ if __name__ == "__main__":
 
     # Test the accuracy of the model by predicting on the test set 
     test(X_test, y_test, classifier)
-
-
     
-
-
-
-
-
-
-
-
-
