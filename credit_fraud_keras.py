@@ -49,7 +49,8 @@ def test(X_test, y_test, classifier):
     
     y_pred = classifier.predict(X_test)
     y_pred = (y_pred > 0.5)
-    metrics(y_test, y_pred)
+    
+    print(metrics(y_test, y_pred))
 
 def metrics(y_test, y_pred):
     # Predicting the test set using fitted model
@@ -79,6 +80,7 @@ if __name__ == "__main__":
 
     # Test the accuracy of the model by predicting on the test set 
     test(X_test, y_test, classifier)
+
 
     
 
