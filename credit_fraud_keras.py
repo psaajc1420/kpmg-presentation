@@ -50,7 +50,7 @@ def train(X_train, y_train):
 def test(X_test, y_test, classifier):
     
     y_pred = classifier.predict(X_test)
-    y_pred = (y_pred > 0,5)
+    y_pred = (y_pred > 0.5)
     metrics(y_test, y_pred)
 
 def metrics(y_test, y_pred):
