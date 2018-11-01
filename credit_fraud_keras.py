@@ -35,29 +35,29 @@ def cross_validate(X, y, n_splits=10, visuals=True):
 
     # Applying K-Fold Cross Validation 
     cv = KFold(n_splits=n_splits)
-`   
+
     scores = np.zeros(n_splits)
     for i, train, test in enumerate(cv.split(X, y)):
 
         # Fitting the Neural Network to the training set
         classifier.fit(X[train], y[train], batch_size = 200, epochs = 30)
-        
+
         # Predicting the test set using fitted model
         y_pred = classifier.predict(X[test])
         y_pred = (y_pred > 0.5)
 
         if visuals:
             pass
-        
+
         cm, accuracy, precision, recall, f1_score = metrics(y[test], y_pred, output=False)
 
         scores[i] = accuracy
 
     print("Average Accucracy: {:.2f}", scores.mean())
 
-    
+
 def metrics(y_test, y_pred, output=True):
-    
+
     # Creating the Confusion Matrix
     cm = confusion_matrix(y_test, y_pred)
     tn, fp, fn, tp = cm.ravel()
