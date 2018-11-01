@@ -37,7 +37,7 @@ def cross_validate(X, y, n_splits=10, visuals=True):
     cv = KFold(n_splits=n_splits)
 
     scores = np.zeros(n_splits)
-    for i, train, test in enumerate(cv.split(X, y)):
+    for i, (train, test) in enumerate(cv.split(X, y)):
 
         # Fitting the Neural Network to the training set
         classifier.fit(X[train], y[train], batch_size = 200, epochs = 30)
