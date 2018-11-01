@@ -1,5 +1,6 @@
 configure.sh
-*.txt
+*err*
+*out*
 keras.job
 keras_gpu.job
 .ipynb_checkpoints
