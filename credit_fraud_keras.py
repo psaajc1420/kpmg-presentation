@@ -1,3 +1,4 @@
+import sys
 import time
 import numpy as np
 import pandas as pd
@@ -53,12 +54,12 @@ def cross_validate(X, y, n_splits=10, visuals=True):
         classifier.fit(X[train], y[train], batch_size = 200, epochs = 30, verbose=0)
 
         # Predicting the test set using fitted model
-        y_pred = classifier.predict(X[test])
-        y_pred = (y_pred > 0.5)
+        y_probs = classifier.predict(X[test])
+        y_pred = (y_probs > 0.5)
 
         if visuals:
 
-            fpr, tpr, _ =  roc_curve(y[test], y_pred)
+            fpr, tpr, _ =  roc_curve(y[test], y_probs)
             tprs.append(interp(mean_fpr, fpr, tpr))
             tprs[-1][0] = 0.0
             roc_auc = auc(fpr, tpr)
@@ -164,11 +165,12 @@ if __name__ == "__main__":
     
     metrics(y_test, y_pred, output=True)
 
-    # Running K-Fold Cross validation
-    start_kfold = time.time()
-    cross_validate(X, y, n_splits=10, visuals=True)
-    kfold_time = time.time() - start_kfold
-    print("K-Fold training time: {}".format(kfold_time))
+    if sys.argv[1] == "gpu":
+        # Running K-Fold Cross validation
+        start_kfold = time.time()
+        cross_validate(X, y, n_splits=10, visuals=True)
+        kfold_time = time.time() - start_kfold
+        print("K-Fold training time: {}".format(kfold_time))
 
 
 
