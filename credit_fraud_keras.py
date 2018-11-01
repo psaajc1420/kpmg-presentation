@@ -1,6 +1,7 @@
 import time
-import pandas as pd
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
 from scipy import interp
 from keras.models import Sequential
@@ -37,23 +38,72 @@ def cross_validate(X, y, n_splits=10, visuals=True):
     cv = KFold(n_splits=n_splits)
 
     scores = np.zeros(n_splits)
+    precisions = np.zeros(n_splits)
+    recalls = np.zeros(n_splits)
+    f1_scores = np.zeros(n_splits)
+
+    if visuals:
+        mean_fpr = np.linspace(0, 1, 100)
+        tprs = []
+        aucs = []
+    
     for i, (train, test) in enumerate(cv.split(X, y)):
 
         # Fitting the Neural Network to the training set
-        classifier.fit(X[train], y[train], batch_size = 200, epochs = 30)
+        classifier.fit(X[train], y[train], batch_size = 200, epochs = 30, verbose=0)
 
         # Predicting the test set using fitted model
         y_pred = classifier.predict(X[test])
         y_pred = (y_pred > 0.5)
 
         if visuals:
-            pass
 
-        cm, accuracy, precision, recall, f1_score = metrics(y[test], y_pred, output=False)
+            fpr, tpr, _ =  roc_curve(y[test], y_pred)
+            tprs.append(interp(mean_fpr, fpr, tpr))
+            tprs[-1][0] = 0.0
+            roc_auc = auc(fpr, tpr)
+            aucs.append(roc_auc)
+
+            plt.plot(fpr, tpr, lw=1, alpha=0.4,
+                     label="ROC fold {:d} (AUC = {:0.2f})".format(i, roc_auc))
+
+        _, accuracy, precision, recall, f1_score = metrics(y[test], y_pred, output=False)
 
         scores[i] = accuracy
+        precisions[i] = precision
+        recalls[i] = recall
+        f1_scores[i] = f1_score
+        
+    if visuals:
+        plt.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r',
+                    label='Chance', alpha=.8)
+        mean_tpr = np.mean(tprs, axis=0)
+        mean_tpr[-1] = 1.0
+        mean_auc = auc(mean_fpr, mean_tpr)
+        std_auc = np.std(aucs)
+        plt.plot(mean_fpr, mean_tpr, color='b',
+                label=r'Mean ROC (AUC = %0.2f $\pm$ %0.2f)' % (mean_auc, std_auc),
+                lw=2, alpha=.8)
 
-    print("Average Accucracy: {:.2f}", scores.mean())
+        std_tpr = np.std(tprs, axis=0)
+        tprs_upper = np.minimum(mean_tpr + std_tpr, 1)
+        tprs_lower = np.maximum(mean_tpr - std_tpr, 0)
+        plt.fill_between(mean_fpr, tprs_lower, tprs_upper, color='grey', alpha=.2,
+                        label=r'$\pm$ 1 std. dev.')
+
+        plt.xlim([-0.05, 1.05])
+        plt.ylim([-0.05, 1.05])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title('ROC for Neural Net with Folds')
+        plt.legend(loc="lower right")
+        plt.savefig("ROC_folds.png")
+            
+
+    print("Average Accucracy: {:.2f}".format(scores.mean()))
+    print('Average Precsion: {:.2f}'.format(precisions.mean()))
+    print('Average Recall: {:.2f}'.format(recalls.mean()))
+    print('Average F1 score: {:.2f}'.format(f1_score.mean()))
 
 
 def metrics(y_test, y_pred, output=True):
@@ -67,6 +117,7 @@ def metrics(y_test, y_pred, output=True):
     f1_score = 2*precision*recall/(recall + precision)
 
     if output:
+        print()
         print(cm)
         print('Accuracy: {:.2f}'.format(accuracy))
         print('Precsion: {:.2f}'.format(precision))
@@ -74,9 +125,6 @@ def metrics(y_test, y_pred, output=True):
         print('F1 score: {:.2f}'.format(f1_score))
 
     return cm, accuracy, precision, recall, f1_score
-
-def roc_curve():
-    pass
 
 def tune_parameters():
     pass
