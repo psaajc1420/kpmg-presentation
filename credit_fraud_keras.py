@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 import numpy as np
@@ -58,7 +59,6 @@ def cross_validate(X, y, n_splits=10, visuals=True):
         y_pred = (y_probs > 0.5)
 
         if visuals:
-
             fpr, tpr, _ =  roc_curve(y[test], y_probs)
             tprs.append(interp(mean_fpr, fpr, tpr))
             tprs[-1][0] = 0.0
@@ -74,6 +74,8 @@ def cross_validate(X, y, n_splits=10, visuals=True):
         precisions[i] = precision
         recalls[i] = recall
         f1_scores[i] = f1_score
+
+        print(tprs)
         
     if visuals:
         plt.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r',
@@ -131,6 +133,9 @@ def tune_parameters():
     pass
 
 if __name__ == "__main__":
+
+    if sys.argv[1] == "nogpu":
+        os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
     # Attain the dataset
     dataset = pd.read_csv("~/.datasets/creditcard.csv")
