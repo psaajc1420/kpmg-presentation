@@ -54,7 +54,8 @@ def cross_validate(X, y, n_splits=10, visuals=True):
         # Fitting the Neural Network to the training set
         classifier.fit(X[train], y[train], batch_size = 200, epochs = 30, verbose=0)
         y_probs = classifier.predict_proba(X[test])
-        
+        print(y_probs)
+        break
         # Predicting the test set using fitted model
         y_pred = classifier.predict(X[test])
         y_pred = (y_pred > 0.5)
@@ -130,6 +131,7 @@ def metrics(y_test, y_pred, output=True):
     return cm, accuracy, precision, recall, f1_score
 
 def tune_parameters():
+    
     pass
 
 if __name__ == "__main__":
