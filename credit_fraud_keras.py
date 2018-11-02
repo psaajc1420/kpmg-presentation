@@ -12,6 +12,7 @@ from sklearn.metrics import auc
 from sklearn.metrics import roc_curve
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import KFold
+from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -37,7 +38,7 @@ def create_model():
 def cross_validate(X, y, n_splits=10, visuals=True):
 
     # Applying K-Fold Cross Validation 
-    cv = KFold(n_splits=n_splits)
+    cv = StratifiedKFold(n_splits=n_splits)
 
     scores = np.zeros(n_splits)
     precisions = np.zeros(n_splits)
@@ -54,8 +55,7 @@ def cross_validate(X, y, n_splits=10, visuals=True):
         # Fitting the Neural Network to the training set
         classifier.fit(X[train], y[train], batch_size = 200, epochs = 30, verbose=0)
         y_probs = classifier.predict_proba(X[test])
-        print(y_probs)
-        break
+
         # Predicting the test set using fitted model
         y_pred = classifier.predict(X[test])
         y_pred = (y_pred > 0.5)
@@ -70,12 +70,12 @@ def cross_validate(X, y, n_splits=10, visuals=True):
             plt.plot(fpr, tpr, lw=1, alpha=0.4,
                      label="ROC fold {:d} (AUC = {:0.2f})".format(i, roc_auc))
 
-        # _, accuracy, precision, recall, f1_score = metrics(y[test], y_pred, output=True)
+        _, accuracy, precision, recall, f1_score = metrics(y[test], y_pred, output=False)
 
-        # scores[i] = accuracy
-        # precisions[i] = precision
-        # recalls[i] = recall
-        # f1_scores[i] = f1_score
+        scores[i] = accuracy
+        precisions[i] = precision
+        recalls[i] = recall
+        f1_scores[i] = f1_score
 
         
     if visuals:
@@ -104,10 +104,10 @@ def cross_validate(X, y, n_splits=10, visuals=True):
         plt.savefig("ROC_folds.png")
             
 
-    # print("Average Accucracy: {:.2f}".format(scores.mean()))
-    # print('Average Precsion: {:.2f}'.format(precisions.mean()))
-    # print('Average Recall: {:.2f}'.format(recalls.mean()))
-    # print('Average F1 score: {:.2f}'.format(f1_score.mean()))
+    print("Average Accucracy: {:.2f}".format(scores.mean()))
+    print('Average Precsion: {:.2f}'.format(precisions.mean()))
+    print('Average Recall: {:.2f}'.format(recalls.mean()))
+    print('Average F1 score: {:.2f}'.format(f1_score.mean()))
 
 
 def metrics(y_test, y_pred, output=True):
