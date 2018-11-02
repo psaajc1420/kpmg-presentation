@@ -131,7 +131,6 @@ def metrics(y_test, y_pred, output=True):
     return cm, accuracy, precision, recall, f1_score
 
 def tune_parameters():
-    
     pass
 
 if __name__ == "__main__":
@@ -175,7 +174,7 @@ if __name__ == "__main__":
     if sys.argv[1] == "gpu":
         # Running K-Fold Cross validation
         start_kfold = time.time()
-        cross_validate(X, y, n_splits=10, visuals=True)
+        cross_validate(X, y, n_splits=5, visuals=True)
         kfold_time = time.time() - start_kfold
         print("K-Fold training time: {}".format(kfold_time))
 
