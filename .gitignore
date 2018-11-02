@@ -3,4 +3,5 @@ configure.sh
 *out*
 keras.job
 keras_gpu.job
+keras_gpu_dev.job
 .ipynb_checkpoints
