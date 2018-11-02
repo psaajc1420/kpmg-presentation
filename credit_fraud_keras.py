@@ -67,6 +67,8 @@ def cross_validate(X, y, classifier, n_splits=10, visuals=True):
 
         if visuals:
             fpr, tpr, _ =  roc_curve(y[test], y_probs)
+            print(fpr)
+            print(tpr)
             tprs.append(interp(mean_fpr, fpr, tpr))
             tprs[-1][0] = 0.0
             roc_auc = auc(fpr, tpr)
