@@ -59,16 +59,8 @@ def cross_validate(X, y, n_splits=10, visuals=True):
 
         # Predicting the test set using fitted model
         y_probs = classifier.predict(X[test], batch_size=200)
-        y_classes = y_probs.argmax(axis=-1)
+        # y_classes = y_probs.argmax(axis=-1)
         y_pred = (y_probs > 0.5) 
-        
-        print(len(y_probs))
-        print(len(y[test]))
-
-        print(y_probs)
-        print(y_classes)
-        print(y[test])
-        print(y_pred)
 
         if visuals:
             fpr, tpr, _ =  roc_curve(y[test], y_probs)
@@ -82,14 +74,12 @@ def cross_validate(X, y, n_splits=10, visuals=True):
             plt.plot(fpr, tpr, lw=1, alpha=0.4,
                      label="ROC fold {:d} (AUC = {:0.2f})".format(i, roc_auc))
 
-        _, accuracy, precision, recall, f1_score = metrics(y[test], y_classes, output=False)
+        _, accuracy, precision, recall, f1_score = metrics(y[test], y_pred, output=False)
 
         scores[i] = accuracy
         precisions[i] = precision
         recalls[i] = recall
         f1_scores[i] = f1_score
-
-        break
 
     if visuals:
         plt.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r',
