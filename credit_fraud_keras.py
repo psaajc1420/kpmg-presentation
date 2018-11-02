@@ -54,11 +54,14 @@ def cross_validate(X, y, n_splits=10, visuals=True):
 
         # Fitting the Neural Network to the training set
         classifier.fit(X[train], y[train], batch_size = 200, epochs = 30, verbose=0)
-        y_probs = classifier.predict_proba(X[test])
+        # y_probs = classifier.predict_proba(X[test])
 
         # Predicting the test set using fitted model
-        y_pred = classifier.predict(X[test])
+        y_probs = classifier.predict(X[test])
         y_pred = (y_pred > 0.5)
+
+        print(y_probs)
+        break
 
         if visuals:
             fpr, tpr, _ =  roc_curve(y[test], y_probs)
@@ -159,15 +162,15 @@ if __name__ == "__main__":
     # Create the Neural Network model
     classifier = create_model()
 
-    # Fitting the Neural Network to the training set
-    start_train = time.time()
-    classifier.fit(X_train, y_train, batch_size = 200, epochs = 30)
-    train_time = (time.time() - start_train)
-    print("Training time: {}".format(train_time))
+    # # Fitting the Neural Network to the training set
+    # start_train = time.time()
+    # classifier.fit(X_train, y_train, batch_size = 200, epochs = 30)
+    # train_time = (time.time() - start_train)
+    # print("Training time: {}".format(train_time))
 
-    # Predicting the test set using fitted model
-    y_pred = classifier.predict(X_test)
-    y_pred = (y_pred > 0.5)
+    # # Predicting the test set using fitted model
+    # y_pred = classifier.predict(X_test)
+    # y_pred = (y_pred > 0.5)
     
     metrics(y_test, y_pred, output=True)
 
