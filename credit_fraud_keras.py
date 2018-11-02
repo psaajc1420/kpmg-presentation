@@ -35,7 +35,7 @@ def create_model():
     return classifier
 
 
-def cross_validate(X, y, n_splits=10, visuals=True):
+def cross_validate(X, y, classifier, n_splits=10, visuals=True):
 
     # Applying K-Fold Cross Validation 
     cv = StratifiedKFold(n_splits=n_splits)
@@ -54,14 +54,10 @@ def cross_validate(X, y, n_splits=10, visuals=True):
 
         # Fitting the Neural Network to the training set
         classifier.fit(X[train], y[train], batch_size = 200, epochs = 30, verbose=0)
-        # y_probs = classifier.predict_proba(X[test])
 
         # Predicting the test set using fitted model
         y_probs = classifier.predict(X[test])
-        y_pred = (y_pred > 0.5)
-
-        print(y_probs)
-        break
+        y_pred = (y_probs > 0.5) 
 
         if visuals:
             fpr, tpr, _ =  roc_curve(y[test], y_probs)
@@ -80,7 +76,6 @@ def cross_validate(X, y, n_splits=10, visuals=True):
         recalls[i] = recall
         f1_scores[i] = f1_score
 
-        
     if visuals:
         plt.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r',
                     label='Chance', alpha=.8)
@@ -172,14 +167,14 @@ if __name__ == "__main__":
     # y_pred = classifier.predict(X_test)
     # y_pred = (y_pred > 0.5)
     
-    metrics(y_test, y_pred, output=True)
+    # metrics(y_test, y_pred, output=True)
 
     if sys.argv[1] == "gpu":
-        # Running K-Fold Cross validation
-        start_kfold = time.time()
-        cross_validate(X, y, n_splits=5, visuals=True)
-        kfold_time = time.time() - start_kfold
-        print("K-Fold training time: {}".format(kfold_time))
+      # Running K-Fold Cross validation
+      start_kfold = time.time()
+      cross_validate(X, y, classifier, n_splits=5, visuals=True)
+      kfold_time = time.time() - start_kfold
+      print("K-Fold training time: {}".format(kfold_time))
 
 
 
