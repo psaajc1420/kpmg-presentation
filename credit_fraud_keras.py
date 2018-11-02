@@ -122,6 +122,7 @@ def metrics(y_test, y_pred, output=True):
 
     # Creating the Confusion Matrix
     cm = confusion_matrix(y_test, y_pred)
+    print(cm)
     tn, fp, fn, tp = cm.ravel()
     accuracy = (tp + tn)/(tn + tp + fn + fp)
     precision = tp/(tp + fp)
