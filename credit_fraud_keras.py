@@ -75,7 +75,7 @@ def cross_validate(X, y, n_splits=10, visuals=True):
         recalls[i] = recall
         f1_scores[i] = f1_score
 
-        print(tprs)
+    print(tprs)
         
     if visuals:
         plt.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r',
