@@ -66,6 +66,7 @@ def cross_validate(X, y, classifier, n_splits=10, visuals=True):
         print(y_probs)
         print(y_classes)
         print(y[test])
+        print(y_pred)
 
         if visuals:
             fpr, tpr, _ =  roc_curve(y[test], y_probs)
@@ -79,7 +80,7 @@ def cross_validate(X, y, classifier, n_splits=10, visuals=True):
             plt.plot(fpr, tpr, lw=1, alpha=0.4,
                      label="ROC fold {:d} (AUC = {:0.2f})".format(i, roc_auc))
 
-        _, accuracy, precision, recall, f1_score = metrics(y[test], y_pred, output=False)
+        _, accuracy, precision, recall, f1_score = metrics(y[test], y_classes, output=False)
 
         scores[i] = accuracy
         precisions[i] = precision
