@@ -57,12 +57,14 @@ def cross_validate(X, y, classifier, n_splits=10, visuals=True):
 
         # Predicting the test set using fitted model
         y_probs = classifier.predict(X[test], batch_size=200)
+        y_classes = y_probs.argmax(axis=-1)
         y_pred = (y_probs > 0.5) 
         
         print(len(y_probs))
         print(len(y[test]))
 
         print(y_probs)
+        print(y_classes)
         print(y[test])
 
         if visuals:
