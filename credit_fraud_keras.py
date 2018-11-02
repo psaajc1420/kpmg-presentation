@@ -35,7 +35,7 @@ def create_model():
     return classifier
 
 
-def cross_validate(X, y, classifier, n_splits=10, visuals=True):
+def cross_validate(X, y, n_splits=10, visuals=True):
 
     # Applying K-Fold Cross Validation 
     cv = StratifiedKFold(n_splits=n_splits)
@@ -51,6 +51,8 @@ def cross_validate(X, y, classifier, n_splits=10, visuals=True):
         aucs = []
     
     for i, (train, test) in enumerate(cv.split(X, y)):
+
+        classifier = create_model()
 
         # Fitting the Neural Network to the training set
         classifier.fit(X[train], y[train], batch_size = 200, epochs = 30, verbose=0)
@@ -186,7 +188,7 @@ if __name__ == "__main__":
     if sys.argv[1] == "gpu":
         # Running K-Fold Cross validation
         start_kfold = time.time()
-        cross_validate(X, y, classifier, n_splits=5, visuals=True)
+        cross_validate(X, y, n_splits=5, visuals=True)
         kfold_time = time.time() - start_kfold
         print("K-Fold training time: {}".format(kfold_time))
 
